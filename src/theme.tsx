@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme, StyleFunctionProps, defineStyleConfig } from "@chakra-ui/react";
 
 const fonts = { mono: `'Menlo', monospace` };
 
@@ -9,8 +9,34 @@ const breakpoints = {
   xl: "80em",
 };
 
+// const buttonTheme = defineStyleConfig({
+//   baseStyle: {
+//     bg: (props: StyleFunctionProps) => ({
+//       bg: props.colorMode === 'light' ? '#33323c' : '#f2f2f4',
+//     }),
+//   },
+// });
+
 const theme = extendTheme({
-  useSystemColorMode: false,
+  // useSystemColorMode: false,
+    styles: {
+      global: {
+        body: {
+          bg: (props: StyleFunctionProps) => ({
+            bg: props.colorMode === 'dark' ? '#1a1a1a' : '#f2f2f4',
+          }),
+          color: (props: StyleFunctionProps) => ({
+            color: props.colorMode === 'dark' ? '#f2f2f4' : '#1a1a1a',
+          }),
+          border: (props: StyleFunctionProps) => ({
+            border: props.colorMode === 'dark' ? '#f2f2f4' : '#1a1a1a',
+          }),
+        },
+      },
+    },
+  // components: {
+  //   Button: buttonTheme,
+  // },
   fonts,
   breakpoints,
 });
