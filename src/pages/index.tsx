@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Center,
   Container,
   Flex,
   Grid,
@@ -25,8 +24,30 @@ import { CheckCircleIcon } from "@chakra-ui/icons";
 import Confetti from 'react-confetti';
 
 
+import { useRef } from 'react'
+import { Fireworks } from '@fireworks-js/react'
+import type { FireworksHandlers } from '@fireworks-js/react'
 
 const Index = () => {
+
+  const ref = useRef<FireworksHandlers>(null)
+
+  const toggle = () => {
+    if (!ref.current) return
+    if (ref.current.isRunning) {
+      ref.current.stop()
+    } else {
+      ref.current.start()
+    }
+  }
+
+  useEffect(() => {
+    if (ref.current && ref.current.isRunning) {
+    toggle();
+    }
+  }, []);
+
+
   const [isMoved, setIsMoved] = useState(false);
   const [moveCount, setMoveCount] = useState(0);
   const [windowSize, setWindowSize] = useState({
@@ -73,9 +94,16 @@ const Index = () => {
       element.addEventListener('transitionend', () => {
         if (isMoved) {
           setMoveCount(0);
+          if(ref.current.isRunning) {
+            ref.current.waitStop();
+          }
         }
       });
     });
+
+    if(moveCount >= 20 && !ref.current.isRunning) {
+      ref.current.start();
+    }
 
   }, [isMoved, moveCount]);
   
@@ -88,8 +116,8 @@ const Index = () => {
   return(
   <>
   {/* Stupid rolling logo */}
-  <div style={{zIndex: 1000, position:"sticky", top:"0", left:"0"}}>
-    <div style={{zIndex: 1000, position: "absolute", left: "10px", top: "10px"}}>
+  <div style={{zIndex: 10000, position:"sticky", top:"0", left:"0"}}>
+    <div style={{zIndex: 10000, position: "absolute", left: "10px", top: "10px"}}>
       <Image 
         className="spin" 
         src={UmbraLogo} 
@@ -107,7 +135,30 @@ const Index = () => {
     </div>
   </div>
 
-
+      <Fireworks
+        ref={ref}
+        options={{ opacity: 1,
+          acceleration: 1.05,
+          friction: 0.97,
+          gravity: 1.5,
+          particles: 500,
+          traceLength: 3,
+          traceSpeed: 10,
+          explosion: 5,
+          intensity: 30,
+          flickering: 50,
+          lineStyle: "square",
+         }}
+        style={{
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          position: 'fixed',
+          pointerEvents: 'none',
+          zIndex: 5000,
+        }}
+      />
       <Confetti
         width={windowSize.width}
         height={windowSize.height}
@@ -119,7 +170,7 @@ const Index = () => {
           zIndex: 5000,
         }}
         recycle={true}
-        numberOfPieces={moveCount >= 10 ? moveCount * 200 : 0}
+        numberOfPieces={moveCount >= 10 ? moveCount * 100 : 0}
         gravity={1}
       />
   
