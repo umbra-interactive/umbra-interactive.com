@@ -68,6 +68,11 @@ const Index = () => {
   const [moveCount, setMoveCount] = useState(0);
   const [highScore, setHighScore] = useState(0);
 
+  const resetHighScore = () => {
+    setHighScore(0);
+    localStorage.removeItem('moveCountHighScore');
+  }
+
   useEffect(() => {
     // Load high score from localStorage on component mount
     const savedHighScore = localStorage.getItem('moveCountHighScore');
@@ -155,7 +160,7 @@ const Index = () => {
   const handleLogoHover = () => {
     setIsMoved(!isMoved);
     setMoveCount(moveCount + 1);
-    if(isHighScoreOpen) onHighScoreClose();
+    if(isHighScoreOpen && moveCount > 2) onHighScoreClose();
   };
 
   useEffect(() => {
@@ -187,7 +192,7 @@ const Index = () => {
       />
     </div>
   </div>
-
+        {/* Score Counter */}
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <MotionModalContent 
           width="fit-content" 
@@ -206,6 +211,7 @@ const Index = () => {
         </MotionModalContent>
       </Modal>
 
+      {/* High Score Modal */}
       <Modal size="2xl" isOpen={isHighScoreOpen} onClose={onHighScoreClose}>
         <MotionModalContent
           initial={{ y: "100vh" }}
@@ -218,10 +224,10 @@ const Index = () => {
         >
           <ModalBody onClick={onHighScoreClose} cursor="pointer" justifyContent="center" display="flex" flexDirection="column" height="100vh">
             <Stack align="center">
-              <Text pointerEvents="none" userSelect="none" fontFamily="monospace" width="fit-content" fontSize="9xl" textAlign="center" bgGradient="linear(to-r, rgb(140, 255, 0), rgb(204, 0, 226))" bgClip="text" fontWeight="bold">
+              <Text pointerEvents="none" userSelect="none" fontFamily="monospace" width="fit-content" fontSize="9xl" textAlign="center" bgGradient="linear(to-r, rgb(0, 229, 255), rgb(204, 0, 226))" bgClip="text" fontWeight="bold">
                 {highScore}
               </Text>
-              <Text mt={-50} pointerEvents="none" userSelect="none" fontFamily="monospace" width="fit-content" fontSize="6xl" textAlign="center" bgGradient="linear(to-r, rgb(140, 255, 0), rgb(204, 0, 226))" bgClip="text" fontWeight="bold">
+              <Text mt={-50} pointerEvents="none" userSelect="none" fontFamily="monospace" width="fit-content" fontSize="6xl" textAlign="center" bgGradient="linear(to-r, rgb(0, 229, 255), rgb(204, 0, 226))" bgClip="text" fontWeight="bold">
                 NEW HIGH SCORE! 
               </Text>
             </Stack>
@@ -430,6 +436,10 @@ const Index = () => {
         </Flex>
         
         <Text mt={10}>© Umbra Interactive, LLC</Text>
+        <Box cursor="pointer" userSelect="none" onClick={resetHighScore}>
+
+        <Text size="xs">{highScore ? highScore : ""}</Text>
+        </Box>
         </Stack>
     </Container>
   </>
