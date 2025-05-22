@@ -8,6 +8,10 @@ import {
   Link,
   Stack,
   Text,
+  Modal,
+  ModalContent,
+  ModalBody,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import UmbraLogo from '../assets/UmbraButton_14x.png'
@@ -16,21 +20,34 @@ import GudnakLogo from '../assets/gudnak-logo.png'
 import Kickstarter from '../assets/ks.svg'
 import Chaotic from '../assets/chaotic-great.png'
 import GudnakCard from '../assets/gudnak-card.png'
-import Gameplay_1 from '../assets/video1.gif'
-import Gameplay_2 from '../assets/video2.gif'
-import Gameplay_3 from '../assets/video3.gif'
+import GoblinExplode from '../assets/video1.gif'
+import CravenPrinceInspect from '../assets/video2.gif'
+import DragonVictory from '../assets/video3.gif'
+import DelguonVictory from '../assets/video4.gif'
+import ShardswornVictory from '../assets/video5.gif'
+import UltimateSacrifice from '../assets/video6.gif'
+import PaxEast from '../assets/pax-east.png'
 import { useEffect, useState } from "react";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import Confetti from 'react-confetti';
-
+import { motion } from "framer-motion";
 
 import { useRef } from 'react'
 import { Fireworks } from '@fireworks-js/react'
 import type { FireworksHandlers } from '@fireworks-js/react'
 
-const Index = () => {
+const COUNTER_NUMBER = 10;
+const CONFETTI_NUMBER = 25;
+const FIREWORKS_NUMBER = 50;
 
+const MotionModalContent = motion(ModalContent);
+
+const Index = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isHighScoreOpen, onOpen: onHighScoreOpen, onClose: onHighScoreClose } = useDisclosure();
   const ref = useRef<FireworksHandlers>(null)
+  const [previousHighScore, setPreviousHighScore] = useState(0);
+  const [achievedNewHighScore, setAchievedNewHighScore] = useState(false);
 
   const toggle = () => {
     if (!ref.current) return
@@ -47,9 +64,36 @@ const Index = () => {
     }
   }, []);
 
-
   const [isMoved, setIsMoved] = useState(false);
   const [moveCount, setMoveCount] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+
+  useEffect(() => {
+    // Load high score from localStorage on component mount
+    const savedHighScore = localStorage.getItem('moveCountHighScore');
+    if (savedHighScore) {
+      setHighScore(parseInt(savedHighScore));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (moveCount > highScore) {
+      setPreviousHighScore(highScore);
+      setHighScore(moveCount);
+      localStorage.setItem('moveCountHighScore', moveCount.toString());
+      if (moveCount > 10) {
+        setAchievedNewHighScore(true);
+      }
+    }
+  }, [moveCount, highScore]);
+
+  useEffect(() => {
+    if (moveCount === 0 && highScore > 10 && achievedNewHighScore) {
+      onHighScoreOpen();
+      setAchievedNewHighScore(false);
+    }
+  }, [moveCount, highScore, achievedNewHighScore, onHighScoreOpen]);
+
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
@@ -101,7 +145,7 @@ const Index = () => {
       });
     });
 
-    if(moveCount >= 20 && !ref.current.isRunning) {
+    if(moveCount >= FIREWORKS_NUMBER && !ref.current.isRunning) {
       ref.current.start();
     }
 
@@ -111,7 +155,16 @@ const Index = () => {
   const handleLogoHover = () => {
     setIsMoved(!isMoved);
     setMoveCount(moveCount + 1);
+    if(isHighScoreOpen) onHighScoreClose();
   };
+
+  useEffect(() => {
+    if (moveCount === COUNTER_NUMBER) {
+      onOpen();
+    } else if (moveCount === 0) {
+      onClose();
+    }
+  }, [moveCount, onOpen, onClose]);
 
   return(
   <>
@@ -134,6 +187,47 @@ const Index = () => {
       />
     </div>
   </div>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <MotionModalContent 
+          width="fit-content" 
+          bg="rgba(255, 255, 255)" 
+          borderRadius="lg" 
+          border="10px solid #f2f2f4"
+          initial={{ y: "100vh" }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", duration: 0.5 }}
+        >
+          <ModalBody width="fit-content">
+            <Text fontSize="4xl" textAlign="center" color="black">
+              {moveCount}
+            </Text>
+          </ModalBody>
+        </MotionModalContent>
+      </Modal>
+
+      <Modal size="2xl" isOpen={isHighScoreOpen} onClose={onHighScoreClose}>
+        <MotionModalContent
+          initial={{ y: "100vh" }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", duration: 0.5 }}
+          bg="rgba(0,0,0, 0.8)"
+          boxShadow="none"
+          outline="none"
+          borderRadius="50"
+        >
+          <ModalBody onClick={onHighScoreClose} cursor="pointer" justifyContent="center" display="flex" flexDirection="column" height="100vh">
+            <Stack align="center">
+              <Text pointerEvents="none" userSelect="none" fontFamily="monospace" width="fit-content" fontSize="9xl" textAlign="center" bgGradient="linear(to-r, rgb(140, 255, 0), rgb(204, 0, 226))" bgClip="text" fontWeight="bold">
+                {highScore}
+              </Text>
+              <Text mt={-50} pointerEvents="none" userSelect="none" fontFamily="monospace" width="fit-content" fontSize="6xl" textAlign="center" bgGradient="linear(to-r, rgb(140, 255, 0), rgb(204, 0, 226))" bgClip="text" fontWeight="bold">
+                NEW HIGH SCORE! 
+              </Text>
+            </Stack>
+          </ModalBody>
+        </MotionModalContent>
+      </Modal>
 
       <Fireworks
         ref={ref}
@@ -166,11 +260,10 @@ const Index = () => {
           position: 'fixed',
           top: 0,
           left: 0,
-          pointerEvents: 'none',
           zIndex: 5000,
         }}
         recycle={true}
-        numberOfPieces={moveCount >= 10 ? moveCount * 100 : 0}
+        numberOfPieces={moveCount >= CONFETTI_NUMBER ? moveCount * 100 : 0}
         gravity={1}
       />
   
@@ -195,7 +288,7 @@ const Index = () => {
           <Stack direction="column" alignItems="center">
 
             {/* Gudnak */}
-            <div className="sticky" style={{ marginBottom: "30px", borderBottom: "2px solid #f2f2f4", padding:"6px", top: "75px", zIndex: 300, width: "100%", backgroundColor: "#1a1a1a"}}>
+            <div className="sticky" style={{ marginBottom: "10px", borderBottom: "2px solid #f2f2f4", padding:"6px", top: "75px", zIndex: 300, width: "100%", backgroundColor: "#1a1a1a"}}>
               <Image style={{margin: "auto"}} src={GudnakLogo} alt="Gudnak" height={100} />
             </div>
             <Text fontSize="3xl" textAlign="center" p={3} borderRadius="lg" width="fit-content">
@@ -203,27 +296,61 @@ const Index = () => {
             </Text>
               <br />
               <br />
-              <Heading mb={5} textDecoration="underline" size={"lg"}>Features</Heading>
-                <Grid gridTemplateColumns="1fr 1fr">
-                  <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Mobile Multiplayer </Text></Flex>
-                  <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Online Matchmaking and Leaderboards</Text></Flex>
-                  <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Offline Single Player Modes</Text></Flex>
-                  <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Exclusive Digital Content</Text></Flex>
-                  <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Original Soundtrack and Voiceovers</Text></Flex>
-                  <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Lots more to come!</Text></Flex>
-               </Grid>
+            <Image src={PaxEast} alt="Gudnak Digital at Pax East 2025" />
+            <Text fontSize="md" textAlign="center" fontStyle="italic">Gudnak Digital Playtest Demo at Pax East 2025</Text>
+            <Heading my={5} textDecoration="underline" size={"lg"}>Features</Heading>
+            <Grid gridTemplateColumns="1fr 1fr">
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Mobile Multiplayer </Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Online Matchmaking and Leaderboards</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Offline Single Player Modes</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Exclusive Digital Content</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Original Soundtrack and Voiceovers</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Lots more to come!</Text></Flex>
+            </Grid>
               
-              <Heading my={10} textDecoration="underline" size={"lg"}>Screens</Heading>
+            <Heading my={10} textDecoration="underline" size={"lg"}>Screens</Heading>
             <Flex direction="row" justifyContent="center" gap={10} mb={10} width="100%">
+              <Flex direction="column" alignItems="center">
+                <Box borderRadius="lg" border="10px solid" overflow="hidden">
+                  <Image src={GoblinExplode} alt="Goblin Demolitionists" height="500" />
+                </Box>
+                <Text fontStyle="italic" fontSize="md" textAlign="center">Demolition "Experts"</Text>
+              </Flex>
+              <Flex direction="column" alignItems="center">
+                <Box borderRadius="lg" border="10px solid" overflow="hidden">
+                  <Image src={CravenPrinceInspect} alt="Gudnak Digital Gameplay" height="500" />
+                </Box>
+                <Text fontStyle="italic" fontSize="md" textAlign="center">Craven Prince</Text>
+              </Flex>
+              <Flex direction="column" alignItems="center">
+                <Box borderRadius="lg" border="10px solid" overflow="hidden">
+                  <Image src={UltimateSacrifice} alt="Gudnak Digital Gameplay" height="500" />
+                </Box>
+                <Text fontStyle="italic" fontSize="md" textAlign="center">Ultimate Sacrifice</Text>
+              </Flex>
+            </Flex>
+            <Flex direction="row" justifyContent="center" gap={10} mb={10} width="100%">
+              <Flex direction="column" alignItems="center">
+
               <Box borderRadius="lg" border="10px solid" overflow="hidden">
-                <Image src={Gameplay_1} alt="Gudnak Digital Gameplay" height="500" />
-              </Box>
-              <Box borderRadius="lg" border="10px solid" overflow="hidden">
-                <Image src={Gameplay_2} alt="Gudnak Digital Gameplay" height="500" />
-              </Box>
-              <Box borderRadius="lg" border="10px solid" overflow="hidden">
-                <Image src={Gameplay_3} alt="Gudnak Digital Gameplay" height="500" />
-              </Box>
+                <Image src={DelguonVictory} alt="Gudnak Digital Gameplay" height="500" />
+                </Box>
+                <Text fontStyle="italic" fontSize="md" textAlign="center">Victory Screen (Deeprock Delver)</Text>
+              </Flex>
+              <Flex direction="column" alignItems="center">
+                <Box borderRadius="lg" border="10px solid" overflow="hidden">
+                  <Image src={DragonVictory} alt="Gudnak Digital Gameplay" height="500" />
+                </Box>
+                <Text fontStyle="italic" fontSize="md" textAlign="center">Victory Screen (The Shard Dragon)</Text>
+              </Flex>
+              <Flex direction="column" alignItems="center">
+                <Box borderRadius="lg" border="10px solid" overflow="hidden">
+                  <Image src={ShardswornVictory} alt="Gudnak Digital Gameplay" height="500" />
+                </Box>
+                <Text fontStyle="italic" fontSize="md" textAlign="center">Victory Screen (Elven 
+                  Valkyrie)
+                </Text>
+              </Flex>
             </Flex>
             <Heading my={10} textDecoration="underline" size={"lg"}>Links</Heading>
 
