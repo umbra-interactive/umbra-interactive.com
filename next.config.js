@@ -6,6 +6,8 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
+    trailingSlash: true,
+    basePath: '/gudnak',
     // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
     // trailingSlash: true,
    
