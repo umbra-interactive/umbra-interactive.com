@@ -6,7 +6,6 @@ export default class Document extends NextDocument {
     return (
       <Html>
         <Head>
-          <title>Umbra Interactive</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body>
