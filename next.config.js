@@ -7,7 +7,7 @@ const nextConfig = {
         unoptimized: true,
     },
     trailingSlash: true,
-    basePath: '/gudnak',
+    basePath: '',
     // Optional: Change links `/me` -> `/me/` and emit `/me.html` -> `/me/index.html`
     // trailingSlash: true,
    
