@@ -302,19 +302,19 @@ const Index = () => {
             </Text>
               <br />
               <br />
-            <Image src={PaxEast} alt="Gudnak Digital at Pax East 2025" />
-            <Text fontSize="md" textAlign="center" fontStyle="italic">Gudnak Digital Playtest Demo at Pax East 2025</Text>
-            <Heading my={5} textDecoration="underline" size={"lg"}>Features</Heading>
-            <Grid gridTemplateColumns="1fr 1fr">
-              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Mobile Multiplayer </Text></Flex>
-              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Online Matchmaking and Leaderboards</Text></Flex>
-              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Offline Single Player Modes</Text></Flex>
-              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Exclusive Digital Content</Text></Flex>
-              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Original Soundtrack and Voiceovers</Text></Flex>
-              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon /> <Text fontSize="2xl">Lots more to come!</Text></Flex>
+            <Image style={{borderRadius: "10px", border: "3px solid #f2f2f4"}} src={PaxEast} alt="Gudnak Digital at Pax East 2025" height={600}/>
+            <Text mb={10} fontSize="md" textAlign="center" fontStyle="italic">Gudnak Digital Playtest Demo at Pax East 2025</Text>
+            <Heading my={5} textDecoration="underline" size={"xl"}>The Plan</Heading>
+            <Grid gridTemplateColumns="1fr 1fr" mb={10} border="1px solid #f2f2f4" p={5} borderRadius="lg">
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon color="#6e8247" fontSize={24}/> <Text fontSize="2xl">Mobile Multiplayer </Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon color="#6e8247" fontSize={24}/> <Text fontSize="2xl">Online Matchmaking and Leaderboards</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon color="#6e8247" fontSize={24}/> <Text fontSize="2xl">Offline Single Player Modes</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon color="#6e8247" fontSize={24}/> <Text fontSize="2xl">Exclusive Digital Content</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon color="#6e8247" fontSize={24}/> <Text fontSize="2xl">Original Soundtrack and Voiceovers</Text></Flex>
+              <Flex direction="row" alignItems="center" gap={3}><CheckCircleIcon color="#6e8247" fontSize={24}/> <Text fontSize="2xl">Lots more to come!</Text></Flex>
             </Grid>
               
-            <Heading my={10} textDecoration="underline" size={"lg"}>Screens</Heading>
+            <Heading my={5} textDecoration="underline" size={"xl"}>Sneak Peeks</Heading>
             <Flex direction="row" justifyContent="center" gap={10} mb={10} width="100%">
               <Flex direction="column" alignItems="center">
                 <Box borderRadius="lg" border="10px solid" overflow="hidden">
@@ -358,7 +358,7 @@ const Index = () => {
                 </Text>
               </Flex>
             </Flex>
-            <Heading my={10} textDecoration="underline" size={"lg"}>Links</Heading>
+            <Heading my={5} textDecoration="underline" size={"xl"}>Click These Links!</Heading>
 
             <Grid gridTemplateColumns="1fr 1fr 1fr" gap={2}>
               <Link href="https://gudnak.com/" _hover={{textDecoration: "none"}} target="_blank">
@@ -403,39 +403,66 @@ const Index = () => {
         </Container>
 
         {/* About */}
-        <Flex maxW="container.md" my={10} direction="column" id="about" py={20}>
+        <Flex maxW="container.md" my={100} direction="column" id="about" py={20} gap={6}>
           <div className="sticky" style={{marginBottom: "30px", borderBottom: "2px solid #f2f2f4", padding:"6px", top: "75px", zIndex: 300, width: "100%", backgroundColor: "#1a1a1a"}}>
             <Heading p={3} size="3xl" textAlign="center" mb={3}>
-              About
+              About Us
             </Heading>
           </div>
-          <Text margin="auto" fontSize="3xl">
-            We are an independent games development studio based in Portland, Oregon. 
-            <br />
-            Our team consists of Luke, Sam, Pete, and Michael.
-            <br />
-            <br />
-          </Text>
+              <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={10}>
+                <Stack width="fit-content" direction="column" alignItems="center">
+                  <Image src={GudnakCard} alt="Luke" height={100} />
+                  <Text fontSize="2xl" width="fit-content">Luke</Text>
+                </Stack>
+                <Text width="75%">
+                  Luke is a software engineer and game developer with a passion for creating unique and engaging experiences.
+                </Text>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={10}>
+                <Stack width="fit-content" direction="column" alignItems="center">
+                  <Image src={GudnakCard} alt="Sam" height={100} />
+                  <Text fontSize="2xl" width="fit-content">Sam</Text>
+                </Stack>
+                <Text width="75%">
+                  Sam is a software engineer and game developer with a passion for creating unique and engaging experiences.
+                </Text>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={10}>
+                <Stack width="fit-content" direction="column" alignItems="center">
+                  <Image src={GudnakCard} alt="Pete" height={100} />
+                  <Text fontSize="2xl" width="fit-content">Pete</Text>
+                </Stack>
+                <Text width="75%">
+                  Pete is a software engineer and game developer with a passion for creating unique and engaging experiences.
+                </Text>
+              </Box>
+              <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center" gap={10}>
+                <Stack width="fit-content" direction="column" alignItems="center">
+                  <Image src={GudnakCard} alt="Michael" height={100} />
+                  <Text fontSize="2xl" width="fit-content">Michael</Text>
+                </Stack>
+                <Text width="75%">
+                  Michael is a software engineer and game developer with a passion for creating unique and engaging experiences.
+                </Text>
+              </Box>
         </Flex>
-
         {/* Contact */}
-        <Flex maxW="container.md" my={10} direction="column" id="contact" py={20}>
-          <div className="sticky" style={{marginBottom: "30px", borderBottom: "2px solid #f2f2f4", padding:"6px", top: "75px", zIndex: 300, width: "100%", backgroundColor: "#1a1a1a"}}>
+        <Flex maxW="container.md" gap={10} height="100vh" direction="column" id="contact">
+          <div className="sticky" style={{ borderBottom: "2px solid #f2f2f4", padding:"6px", top: "75px", zIndex: 300, width: "100%", backgroundColor: "#1a1a1a"}}>
             <Heading p={3} size="3xl" textAlign="center" mb={3}>
               Contact
             </Heading>
           </div>
-          <Text margin="auto" fontSize="3xl">
+          <Text marginX="auto" fontSize="3xl">
           If you are a talented 2D / 3D artist, musician, or voice actor, and are interested in contributing to our projects, please contact Luke at the email below. We look forward to hearing from you!
             <br />
             <br />
           </Text>
-          <Button p={8} fontSize="3xl" margin="auto">
+          <Button p={8} fontSize="3xl" marginX="auto">
             <Link textDecoration="underline" href="mailto:luke@umbra-interactive.com">luke@umbra-interactive.com</Link>
           </Button>
         </Flex>
-        
-        <Text mt={10}>© Umbra Interactive, LLC</Text>
+        <Text>© Umbra Interactive, LLC</Text>
         <Box cursor="pointer" userSelect="none" onClick={resetHighScore}>
 
         <Text size="xs">{highScore ? highScore : ""}</Text>
