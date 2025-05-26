@@ -3,7 +3,7 @@ import {
   Box,
   Text
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ULogo as UmbraLogo } from "../components/Logo";
 import { AboutUs } from "../components/AboutUs";
 import { Gudnak } from "../components/Gudnak/Gudnak";
@@ -20,18 +20,41 @@ const Index = () => {
     }
   }, []);
 
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+      
+    // Update window size on resize and initial load
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Set initial size
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+
 
   return(
   <>
-    <UmbraLogo />
+    <UmbraLogo windowSize={windowSize} />
     <TopBar />
-    <Container minW="container.lg" pt={10} id="projects">
-      <Gudnak />
+    <Container maxW={{base: "container.sm", md: "container.lg"}} pt={{base: 4, md: 10}} id="projects">
+      <Gudnak windowSize={windowSize} />
     </Container>
-    <Container minW="container.lg" id="about">
+    <Container maxW={{base: "container.sm", md: "container.lg"}} id="about">
       <AboutUs />
     </Container>
-    <Container minW="container.lg" id="contact">
+    <Container maxW={{base: "container.sm", md: "container.lg"}} id="contact">
       <Contact />
       <Text textAlign="center" fontSize="sm">© Umbra Interactive, LLC</Text>
       <Box height="50vh"/>

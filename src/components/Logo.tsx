@@ -11,7 +11,7 @@ const COUNTER_NUMBER = 10;
 const CONFETTI_NUMBER = 25;
 const FIREWORKS_NUMBER = 50;
 
-export const ULogo = () => {
+export const ULogo = ({windowSize}: {windowSize: {width: number, height: number}}) => {
     const { isOpen: isScoreOpen, onOpen: onScoreOpen, onClose: onScoreClose } = useDisclosure();
     const { isOpen: isHighScoreOpen, onOpen: onHighScoreOpen, onClose: onHighScoreClose } = useDisclosure();
     const [highScore, setHighScore] = useState(0);
@@ -19,33 +19,13 @@ export const ULogo = () => {
     const [isMoved, setIsMoved] = useState(false);
     const [moveCount, setMoveCount] = useState(0);
     const [achievedNewHighScore, setAchievedNewHighScore] = useState(false);
-    const [windowSize, setWindowSize] = useState({
-      width: 0,
-      height: 0,
-    });
+
+    const isMobile = windowSize.width < 768;
 
     const resetHighScore = () => {
       setHighScore(0);
       localStorage.removeItem('hs');
     }
-
-    useEffect(() => {
-      
-      // Update window size on resize and initial load
-      const handleResize = () => {
-        setWindowSize({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        });
-      };
-  
-      // Set initial size
-      handleResize();
-  
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }, []);
-  
     
     useEffect(() => {
         // Load high score from localStorage on component mount
@@ -122,21 +102,22 @@ export const ULogo = () => {
                     className="spin" 
                     src={UmbraLogo} 
                     alt="Umbra" 
-                    height={150} 
-                    onMouseEnter={handleLogoHover}
+                    height={isMobile ? 65 : 150} 
+                    onClick={() => isMobile && handleLogoHover()}
+                    onMouseEnter={() => !isMobile && handleLogoHover()}
                     style={{
                         transform: isMoved 
                         ? 'translateX(calc(100vw - (100% + 20px))) rotate(1080deg)' 
                         : 'translateX(0) rotate(0deg)',
-                        transition: 'transform 1.5s cubic-bezier(0.1, 0.1, 0.8, 1), translateX 1.5s cubic-bezier(0.36, 0, 0.66, 2)',
+                        transition: `transform ${isMobile ? 0.5 : 1.5}s cubic-bezier(0.1, 0.1, 0.8, 1), translateX ${isMobile ? 0.5 : 1.5}s cubic-bezier(0.36, 0, 0.66, 2)`,
                         transformOrigin: 'center'
                     }}
                     />
             </div>
         </div>
-            <Box onClick={() => resetHighScore()} cursor="pointer" userSelect="none" position="absolute" right="0" zIndex={10000} color="white">
-                <Text fontSize="xx-small">{highScore > 10 ? highScore : ""}</Text>
-            </Box>
+        <Box onClick={() => resetHighScore()} cursor="pointer" userSelect="none" position="absolute" right="0" zIndex={10000} color="white">
+            <Text fontSize="xx-small">{highScore > 10 ? highScore : ""}</Text>
+        </Box>
         <UFireworks playing={fireworks} />
         <UConfetti windowSize={windowSize} numberOfPieces={moveCount >= CONFETTI_NUMBER ? moveCount * 100 : 0}/>
         <UScore isScoreOpen={isScoreOpen} onScoreClose={onScoreClose} score={moveCount}/>

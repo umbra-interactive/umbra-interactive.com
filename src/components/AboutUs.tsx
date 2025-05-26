@@ -5,8 +5,8 @@ import GudnakCard from "../assets/gudnak-card.png"
 
 export const AboutUs = () => {
     return (
-        <Container minW="container.md" py={10} mb={10}>
-            <Flex maxW="container.md" pt={10} direction="column" gap={6}>
+        <Container maxW={{base: "container.sm", md: "container.md"}} py={10} mb={10}>
+            <Flex maxW={{base: "container.sm", md: "container.md"}} pt={10} direction="column" gap={6}>
             <StickySectionHeader>
                 <Heading p={3} size="3xl" textAlign="center" mb={3}>
                 About Us

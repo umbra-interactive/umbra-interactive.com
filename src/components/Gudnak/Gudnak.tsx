@@ -18,18 +18,19 @@ import Chaotic from "../../assets/chaotic-great.png"
 import Discord from "../../assets/discord.png"
 import Kickstarter from "../../assets/ks.svg"
 
-export const Gudnak = () => {
+export const Gudnak = ({windowSize}: {windowSize: {width: number, height: number}}) => {
+    const isMobile = windowSize.width < 768;
     return (
         <Container 
             height="fit-content" 
-            p={5} 
-            minW="container.lg"
+            pt={10} 
+            maxW={{base: "container.sm", md: "container.lg"}}
             >
             <Stack direction="column" alignItems="center">
 
             {/* Gudnak */}
-            <StickySectionHeader>
-                <Image style={{margin: "auto"}} src={GudnakLogo} alt="Gudnak" height={100} />
+            <StickySectionHeader top={isMobile ? "85px" : "75px"}>
+                <Image style={{margin: "auto"}} src={GudnakLogo} alt="Gudnak" height={isMobile ? 75 : 100} />
             </StickySectionHeader>
             <SectionTopText>
                 Gudnak Digital is an upcoming fully-featured adaptation of Gudnak by Chaotic Great Games.
@@ -41,23 +42,23 @@ export const Gudnak = () => {
             
             {/* The Plan */}
             <SectionHeader>The Plan</SectionHeader>
-            <Grid gridTemplateColumns="1fr 1fr" mb={10} border="1px solid #f2f2f4" p={5} borderRadius="lg">
-                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={24}/>} text="Mobile Multiplayer " />
-                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={24}/>} text="Online Matchmaking and Leaderboards" />
-                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={24}/>} text="Offline Single Player Modes" />
-                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={24}/>} text="Exclusive Digital Content" />
-                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={24}/>} text="Original Soundtrack and Voiceovers" />
-                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={24}/>} text="Lots more to come!" />
+            <Grid gridTemplateColumns={{base: "1fr", md: "1fr 1fr"}} mb={10} border="1px solid #f2f2f4" p={5} borderRadius="lg">
+                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={{base: 16, md: 24}}/>} text="Mobile Multiplayer " />
+                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={{base: 16, md: 24}}/>} text="Online Matchmaking and Leaderboards" />
+                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={{base: 16, md: 24}}/>} text="Offline Single Player Modes" />
+                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={{base: 16, md: 24}}/>} text="Exclusive Digital Content" />
+                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={{base: 16, md: 24}}/>} text="Original Soundtrack and Voiceovers" />
+                <IconText icon={<CheckCircleIcon color="#6e8247" fontSize={{base: 16, md: 24}}/>} text="Lots more to come!" />
             </Grid>
 
             {/* Sneak Peeks */}
             <SectionHeader>Sneak Peeks</SectionHeader>
-            <Flex direction="row" justifyContent="center" gap={10} mb={10} width="100%">
+            <Flex direction={{base: "column", md: "row"}} justifyContent="center" gap={10} mb={10} width="100%">
                 <Screenshot image={GoblinExplode} text="Demolition 'Experts'" />
                 <Screenshot image={CravenPrinceInspect} text="Craven Prince" />
                 <Screenshot image={UltimateSacrifice} text="Ultimate Sacrifice" />
             </Flex>
-            <Flex direction="row" justifyContent="center" gap={10} mb={10} width="100%">
+            <Flex direction={{base: "column", md: "row"}} justifyContent="center" gap={10} mb={10} width="100%">
                 <Screenshot image={DelguonVictory} text="Victory Screen (Deeprock Delver)" />
                 <Screenshot image={DragonVictory} text="Victory Screen (The Shard Dragon)" />
                 <Screenshot image={ShardswornVictory} text="Victory Screen (Elven Valkyrie)" />
@@ -65,16 +66,18 @@ export const Gudnak = () => {
 
             {/* Links */}
             <SectionHeader>Click These Links!</SectionHeader>
-            <Grid gridTemplateColumns="1fr 1fr 1fr" gap={2}>
-                <GridLink link="https://gudnak.com/" image={GudnakCard} text="Gudnak" />
-                <GridLink link="https://chaoticgreat.games" image={Chaotic} text="Chaotic Great Games" />
-                <GridLink link="https://discord.com/invite/3XUehd5UkY" image={Discord} text="Gudnak Discord" />
+            <Grid gridTemplateColumns={{base: "1fr", md: "1fr 1fr 1fr"}} width="100%" gap={2}>
+                <GridLink isMobile={isMobile} link="https://gudnak.com/" image={GudnakCard} text="Gudnak" />
+                <GridLink isMobile={isMobile} link="https://chaoticgreat.games" image={Chaotic} text="Chaotic Great Games" />
+                <GridLink isMobile={isMobile} link="https://discord.com/invite/3XUehd5UkY" image={Discord} text="Gudnak Discord" />
             </Grid>
-            <Grid gridTemplateColumns="1fr 1fr" gap={2}>
-                <GridLink link="https://www.kickstarter.com/projects/chaoticgreat/gudnak" image={Kickstarter} text="Gudnak Kickstarter" />
-                <GridLink link="https://www.kickstarter.com/projects/chaoticgreat/gudnak-second-printing-and-expansions" image={Kickstarter} text="Gudnak Expansion Kickstarter" />
+            <Grid gridTemplateColumns={{base: "1fr", md: "1fr 1fr"}} width="100%" gap={2}>
+                <GridLink isMobile={isMobile} link="https://www.kickstarter.com/projects/chaoticgreat/gudnak" image={Kickstarter} text="Gudnak Kickstarter" subtext="881% Funded!" />
+                <GridLink isMobile={isMobile} link="https://www.kickstarter.com/projects/chaoticgreat/gudnak-second-printing-and-expansions" image={Kickstarter} text="Gudnak Expansion Kickstarter" subtext="1015% Funded!" />
             </Grid>
             </Stack>
         </Container>
     )
 }
+
+//  <Text fontSize="md" textAlign="center" mt={-2} whiteSpace="normal" wordBreak="break-word">881% Funded!</Text>
