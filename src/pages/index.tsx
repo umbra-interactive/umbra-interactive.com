@@ -47,7 +47,7 @@ const Index = () => {
   return(
   <>
     <UmbraLogo windowSize={windowSize} />
-    <TopBar />
+    <TopBar windowSize={windowSize} />
     <Container maxW={{base: "container.sm", md: "container.lg"}} pt={{base: 4, md: 10}} id="projects">
       <Gudnak windowSize={windowSize} />
     </Container>

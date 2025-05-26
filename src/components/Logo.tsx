@@ -109,7 +109,7 @@ export const ULogo = ({windowSize}: {windowSize: {width: number, height: number}
                         transform: isMoved 
                         ? 'translateX(calc(100vw - (100% + 20px))) rotate(1080deg)' 
                         : 'translateX(0) rotate(0deg)',
-                        transition: `transform ${isMobile ? 0.5 : 1.5}s cubic-bezier(0.1, 0.1, 0.8, 1), translateX ${isMobile ? 0.5 : 1.5}s cubic-bezier(0.36, 0, 0.66, 2)`,
+                        transition: `transform ${isMobile ? 1 : 1.5}s cubic-bezier(0.1, 0.1, 0.8, 1), translateX ${isMobile ? 1 : 1.5}s cubic-bezier(0.36, 0, 0.66, 2)`,
                         transformOrigin: 'center'
                     }}
                     />
