@@ -1,7 +1,6 @@
 import {
   Container,
   Box,
-  Stack,
   Text
 } from "@chakra-ui/react";
 import { useEffect } from "react";
