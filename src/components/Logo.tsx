@@ -5,7 +5,7 @@ import { UHighScore, UScore } from "../effects/Score";
 import { UFireworks } from "../effects/Fireworks";
 import { UConfetti } from "../effects/Confetti";
 import { useDisclosure, Box, Text } from "@chakra-ui/react";
-
+import { useSwipeable } from 'react-swipeable';
 
 const COUNTER_NUMBER = 10;
 const CONFETTI_NUMBER = 25;
@@ -94,16 +94,34 @@ export const ULogo = ({windowSize}: {windowSize: {width: number, height: number}
         }
       }, [moveCount, onScoreOpen, onScoreClose]);
     
+      // handle swipe events
+      const handleSwipe = (eventData: any) => {
+        if(eventData.dir === "Left") {
+          if(isMoved) {
+            handleLogoHover();
+          }
+        } else if(eventData.dir === "Right") {
+          if(!isMoved) {
+            handleLogoHover();
+          }
+        }
+      }
+  
+      const swipeHandlers = useSwipeable({
+        onSwiped: (eventData) => handleSwipe(eventData),
+        preventScrollOnSwipe: true
+      });
+
     return (
     <>
-        <div style={{zIndex: 10000, position:"sticky", top:"0", left:"0"}}>
+        <div style={{zIndex: 100000, position:"sticky", top:"0", left:"0"}}>
             <div style={{zIndex: 10000, position: "absolute", left: "10px", top: "10px"}}>
                 <Image 
+                    {...(isMobile ? swipeHandlers : {})} 
                     className="spin" 
                     src={UmbraLogo} 
                     alt="Umbra" 
                     height={isMobile ? 65 : 150} 
-                    onClick={() => isMobile && handleLogoHover()}
                     onMouseEnter={() => !isMobile && handleLogoHover()}
                     style={{
                         transform: isMoved 
